@@ -24,5 +24,5 @@ API_DESCRIPTION = 'A Web API for adding and consult books'
 urlpatterns = [
     path('admin-hN&^dyaNpFhQ/', admin.site.urls),
     path('docs/', include_docs_urls(title=API_TITLE, description=API_DESCRIPTION)),
-    path('schema/', get_schema_view(title=API_TITLE))
+    path('schema/', get_schema_view(title=API_TITLE)),
 ]
