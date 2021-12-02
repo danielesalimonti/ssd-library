@@ -1,2 +1,8 @@
 .idea/
+ssd_library/books/__pycache__/
+
+ssd_library/books/migrations/__pycache__/
+
+ssd_library/ssd_library/__pycache__/
+
 env/
