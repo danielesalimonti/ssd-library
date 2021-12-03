@@ -17,8 +17,9 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BookSerializer
 
 
-class BookRent:
-    def rent_book(self, isbn):
+class BookRent(generics.UpdateAPIView):
+    @staticmethod
+    def rent_book(request, isbn):
         book = Book.objects.filter(ISBN=isbn)
         response = HttpResponse()
         if len(book) == 0:
@@ -26,5 +27,5 @@ class BookRent:
         else:
             response.status_code = 200
 
-        book.rent_book(str(get_user_model().get_username()))
+        Book(book).add_user_rent(str(request.user))
         return response
