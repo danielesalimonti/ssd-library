@@ -39,5 +39,6 @@ class Book(models.Model):
         if username not in self.user_rented:
             self._user_rented = json.dumps({'users': self.user_rented + [username]})
             #TODO salvare nel db
+            self.save()
             print(self._user_rented)
 

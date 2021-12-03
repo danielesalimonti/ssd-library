@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import generics
 
 from .models import Book
@@ -20,12 +20,13 @@ class BookDetail(generics.RetrieveUpdateDestroyAPIView):
 class BookRent(generics.UpdateAPIView):
     @staticmethod
     def rent_book(request, isbn):
-        book = Book.objects.filter(ISBN=isbn)
+        book = Book.objects.get(ISBN=isbn)
         response = HttpResponse()
-        if len(book) == 0:
+        if book is None:
             response.status_code = 404
+            return response
         else:
             response.status_code = 200
 
-        Book(book).add_user_rent(str(request.user))
-        return response
+        book.add_user_rent(str(request.user))
+        return redirect('/../../api/v1/')
