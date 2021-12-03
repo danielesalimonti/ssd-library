@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 
@@ -12,7 +14,7 @@ class Book(models.Model):
     title = models.CharField(max_length=100,
                              validators=[RegexValidator(regex=r'^[a-zA-Z0-9 ]+$', message="Invalid title")])
 
-    preview = models.CharField(max_length=60,
+    preview = models.CharField(max_length=60, default='',
                                validators=[
                                    RegexValidator(regex=r'^[a-zA-Z0-9,.?! ]+$', message="Invalid preview")])
 
@@ -23,11 +25,20 @@ class Book(models.Model):
     published_date = models.DateField()
     num_pages = models.IntegerField(validators=[MinValueValidator(limit_value=1), MaxValueValidator(limit_value=10000)])
 
+    _user_rented = models.TextField(default=json.dumps([]))
+
     def __str__(self):
-        return self.title + " - " + self.author
+        return str(self.title) + " - " + str(self.author)
+
+    @property
+    def user_rented(self):
+        return json.loads(str(set(str(self._user_rented))))
 
 
-class BookPurchase(models.Model):
-    book = models.ForeignKey(to=Book)
+    #def rent_book(self, book_id: str):
 
-    #purchased_by = models.charField()
+
+
+
+
+
