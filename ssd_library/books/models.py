@@ -2,6 +2,7 @@ import json
 
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
+from urllib3.util.wait import select_wait_for_socket
 
 
 class Book(models.Model):
@@ -25,20 +26,17 @@ class Book(models.Model):
     published_date = models.DateField()
     num_pages = models.IntegerField(validators=[MinValueValidator(limit_value=1), MaxValueValidator(limit_value=10000)])
 
-    _user_rented = models.TextField(default=json.dumps([]))
+    _user_rented = models.TextField(default=json.dumps({'users':[]}))
 
     def __str__(self):
         return str(self.title) + " - " + str(self.author)
 
     @property
     def user_rented(self):
-        return json.loads(str(set(str(self._user_rented))))
+        return json.loads(self._user_rented)['users']
 
-
-    #def rent_book(self, book_id: str):
-
-
-
-
-
+    @user_rented.setter
+    def add_user_rent(self, username):
+        if username not in self.user_rented:
+            self._user_rented = json.dumps(self.user_rented.append(username))
 

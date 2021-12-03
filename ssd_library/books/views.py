@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import generics
 
@@ -25,5 +26,5 @@ class BookRent:
         else:
             response.status_code = 200
 
-        book.rent_book(user)
+        book.rent_book(str(get_user_model().get_username()))
         return response
