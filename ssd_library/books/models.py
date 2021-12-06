@@ -2,7 +2,6 @@ import json
 
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
-from urllib3.util.wait import select_wait_for_socket
 
 
 class Book(models.Model):
