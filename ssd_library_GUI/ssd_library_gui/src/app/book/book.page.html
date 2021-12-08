@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{book.title}} - {{book.author}}</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="router.navigate(['/my-books'])">
+        <span>My books</span>
+      </ion-button>
+      <ion-button (click)="0">
+        <span>Esci</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>{{book.description}}</ion-card-content>
+  </ion-card>
+
+</ion-content>

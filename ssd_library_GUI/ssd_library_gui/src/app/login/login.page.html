@@ -1,0 +1,21 @@
+<ion-content>
+  <div id="login-form">
+    <form [formGroup]="loginFG">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="text" [formControl]="emailFC"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input type="password" [formControl]="passwordFC"></ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" color="primary" expand="block" (click)="logIn()">Sign In</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+</ion-content>

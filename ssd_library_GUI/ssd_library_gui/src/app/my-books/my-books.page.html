@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Library
+      My books
     </ion-title>
     <ion-buttons slot="secondary">
-      <ion-button (click)="router.navigate(['/my-books'])">
-        <span>My books</span>
+      <ion-button (click)="router.navigate(['/home'])">
+        <span>Library</span>
       </ion-button>
       <ion-button (click)="0">
         <span>Esci</span>
@@ -16,15 +16,11 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-card *ngFor="let book of books" style="padding: 5px;">
+  <ion-card *ngFor="let book of myBooks" style="padding: 5px;">
     <ion-card-header>
       <ion-card-title>{{book.title}}</ion-card-title>
       <ion-card-subtitle>{{book.author}}</ion-card-subtitle>
-      <ion-button style="float: right">Noleggia</ion-button>
+      <ion-button style="float: right" (click)="goToMyBook(book.isbn)">Leggi</ion-button>
     </ion-card-header>
-    <ion-card-content>
-      {{book.preview}}
-    </ion-card-content>
-
   </ion-card>
 </ion-content>
