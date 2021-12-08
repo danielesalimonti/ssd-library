@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'book/:isbn',
     loadChildren: () => import('./book/book.module').then( m => m.BookPageModule)
   },
+  {
+    path: 'error-page',
+    loadChildren: () => import('./error-page/error-page.module').then( m => m.ErrorPagePageModule)
+  },
 ];
 
 @NgModule({
