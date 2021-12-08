@@ -20,5 +20,4 @@ export class HomePage {
         new Date(), 138)
     );
   }
-
 }

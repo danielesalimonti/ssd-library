@@ -17,10 +17,6 @@ export class MyBooksPage implements OnInit {
     ));
   }
 
-  goToMyBook(isbn: string) {
-    this.router.navigate(['/book', isbn]);
-  }
-
   ngOnInit() {
   }
 

@@ -2,6 +2,9 @@
   <ion-toolbar>
     <ion-title>{{book.title}} - {{book.author}}</ion-title>
     <ion-buttons slot="secondary">
+      <ion-button (click)="router.navigate(['/home'])">
+        <span>Library</span>
+      </ion-button>
       <ion-button (click)="router.navigate(['/my-books'])">
         <span>My books</span>
       </ion-button>

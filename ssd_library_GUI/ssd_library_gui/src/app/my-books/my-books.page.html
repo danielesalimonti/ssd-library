@@ -16,11 +16,15 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-card *ngFor="let book of myBooks" style="padding: 5px;">
-    <ion-card-header>
-      <ion-card-title>{{book.title}}</ion-card-title>
-      <ion-card-subtitle>{{book.author}}</ion-card-subtitle>
-      <ion-button style="float: right" (click)="goToMyBook(book.isbn)">Leggi</ion-button>
-    </ion-card-header>
-  </ion-card>
+  <ion-list>
+    <ion-item *ngFor="let book of myBooks">
+      <ion-card style="padding: 5px; width: 100%">
+        <ion-card-header>
+          <ion-card-title>{{book.title}}</ion-card-title>
+          <ion-card-subtitle>{{book.author}}</ion-card-subtitle>
+          <ion-button style="float: right" color="success" (click)="router.navigate(['/book', book.isbn])">Leggi</ion-button>
+        </ion-card-header>
+      </ion-card>
+    </ion-item>
+  </ion-list>
 </ion-content>
