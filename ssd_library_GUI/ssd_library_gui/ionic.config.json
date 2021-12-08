@@ -1,0 +1,7 @@
+{
+  "name": "ssd_library_gui",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
