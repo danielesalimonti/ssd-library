@@ -18,7 +18,7 @@ class Book(models.Model):
                                validators=[
                                    RegexValidator(regex=r'^[a-zA-Z0-9,.?! ]+$', message="Invalid preview")])
 
-    description = models.TextField(max_length=1000,
+    text = models.TextField(max_length=1000,
                                    validators=[
                                        RegexValidator(regex=r'^[a-zA-Z0-9,.?! ]+$', message="Invalid description")])
 
@@ -37,7 +37,6 @@ class Book(models.Model):
     def add_user_rent(self, username):
         if username not in self.user_rented:
             self._user_rented = json.dumps({'users': self.user_rented + [username]})
-            #TODO salvare nel db
             self.save()
             print(self._user_rented)
 

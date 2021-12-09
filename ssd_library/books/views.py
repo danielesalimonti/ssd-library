@@ -3,21 +3,33 @@ from django.shortcuts import render, redirect
 from rest_framework import generics
 
 from .models import Book
-from .serializers import BookSerializer
+from .serializers import BookSerializer, BookSerializerForRentedBooks
 from django.http import HttpResponse
 
 
-class BookList(generics.ListCreateAPIView):
+class BookListAdmin(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
 
-class BookDetail(generics.RetrieveUpdateDestroyAPIView):
+class BookList(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
 
-class BookRent(generics.UpdateAPIView):
+class BookDetail(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookRentedList(generics.ListAPIView):
+    serializer_class = BookSerializerForRentedBooks
+
+    def get_queryset(self):
+        return Book.objects.filter(_user_rented__contains=self.request.user)
+
+
+class BookRent:
     @staticmethod
     def rent_book(request, isbn):
         book = Book.objects.get(ISBN=isbn)
