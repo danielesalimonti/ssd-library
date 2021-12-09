@@ -9,6 +9,8 @@ djangorestframework = "*"
 django-cors-headers = "*"
 coreapi = "*"
 pyyaml = "*"
+dj-rest-auth = "*"
+django-allauth = "*"
 
 [dev-packages]
 
