@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from rest_framework import generics
 
 from .models import Book
+from .permissions import AreRentedBook
 from .serializers import BookSerializer, BookSerializerForRentedBooks
 from django.http import HttpResponse
 
@@ -29,7 +30,14 @@ class BookRentedList(generics.ListAPIView):
         return Book.objects.filter(_user_rented__contains=self.request.user)
 
 
+class BookRentedDetail(generics.RetrieveAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializerForRentedBooks
+    permission_classes = [AreRentedBook]
+
+
 class BookRent:
+
     @staticmethod
     def rent_book(request, isbn):
         book = Book.objects.get(ISBN=isbn)
