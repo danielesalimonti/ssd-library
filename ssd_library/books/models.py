@@ -5,7 +5,7 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 
 
 class Book(models.Model):
-    ISBN = models.CharField(max_length=13, primary_key=True,
+    ISBN = models.CharField(max_length=17, primary_key=True,
                             validators=[RegexValidator(regex=r'^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$',
                                                        message="Doesn't match ISBN pattern")])
     author = models.CharField(max_length=50,
