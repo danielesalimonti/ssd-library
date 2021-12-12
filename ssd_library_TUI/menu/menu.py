@@ -14,11 +14,11 @@ from ssd_library_TUI.misc.regex import matches_pattern
 class Description:
     desc: str
 
-    __regex = r'[a-zA-Z0-9 ,.! \']*'
+    __regex = r'[a-zA-Z0-9!, \.\']*'
 
     def __post_init__(self):
         validate_dataclass(self)
-        #validate('Pattern', value=self.desc, min_len=1, max_len=200, custom=matches_pattern(self.__regex))
+        validate('Pattern', value=self.desc, min_len=1, max_len=200, custom=matches_pattern(self.__regex))
 
     def __str__(self):
         return self.desc
@@ -94,7 +94,6 @@ class Menu:
                 command.action()
                 return command.is_exit
             except (KeyError, ValueError, TypeError) as e:
-                print(e)
                 print("Invalid command, retry!")
 
     def run(self):

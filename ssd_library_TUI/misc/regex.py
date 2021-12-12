@@ -8,6 +8,6 @@ def matches_pattern(regex: str) -> Callable [[str], bool]:
     r = re.compile(regex)
 
     def result(str_to_match: str):
-        return r.fullmatch(str_to_match)
+        return bool(r.fullmatch(str_to_match))
 
     return result

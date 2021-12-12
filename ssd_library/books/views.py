@@ -1,9 +1,10 @@
 import json
 
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
+from rest_framework.response import Response
 
 from .models import Book
 from .permissions import AreRentedBook
@@ -23,7 +24,7 @@ class BookList(generics.ListAPIView):
     serializer_class = BookSerializer
 
 
-class BookDetail(generics.ListAPIView):
+class BookDetail(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -43,10 +44,9 @@ class BookRentedDetail(generics.RetrieveAPIView):
     permission_classes = [AreRentedBook, IsAuthenticated]
 
 
-class BookRent:
+class BookRent(generics.GenericAPIView):
 
-    @staticmethod
-    def rent_book(request, isbn):
+    def get(self, request, isbn):
         if request.user.is_authenticated:
             try:
                 book = Book.objects.get(ISBN=isbn)
@@ -57,5 +57,5 @@ class BookRent:
             book.add_user_rent(str(request.user))
             return redirect('/../../api/v1/')
 
-        return HttpResponse(json.dumps({'detail': 'Authentication credentials were not provided.'}),
-                            content_type="application/json", status=403)
+        content = {'Message': 'Unauthenticated'}
+        return Response(content, status=403)
