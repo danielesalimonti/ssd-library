@@ -69,7 +69,6 @@ def test_rent_and_get_mine_book(books):
     client.get(path)
     path = reverse('my-books') + books[0].ISBN + '/'
     response = client.get(path)
-    print(books[0].ISBN)
     assert response.status_code == HTTP_200_OK
 
 
