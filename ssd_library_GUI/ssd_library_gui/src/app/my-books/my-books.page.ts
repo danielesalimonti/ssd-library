@@ -3,6 +3,7 @@ import {Book} from '../model/book';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {BookService} from '../../services/book.service';
+import {AlertController, ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'app-my-books',
@@ -14,9 +15,11 @@ export class MyBooksPage implements OnInit {
   loadingBooks = true;
   myBooks: Book[] = [];
 
-  constructor(private router: Router,
+  constructor(public router: Router,
               private bookService: BookService,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private toastController: ToastController) {
+
     if(!this.auth.isLogged()) {
       this.router.navigate(['/login']);
     }
@@ -29,24 +32,40 @@ export class MyBooksPage implements OnInit {
         this.loadingBooks = false;
       },
       error => {
-        console.log(error);
-        if(error.status === 403) {
-          this.router.navigate(['/login']);
-        }else{
-          //router.navigate(['/error-page', error]);
+        if(error.status === 0){
+          error.error.detail = 'Lost Connection';
         }
+        localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
+        this.router.navigate(['/login']);
       });
   }
 
 
   logout(){
     this.auth.logout().subscribe(
-      data =>{
-        this.router.navigate(['/login']);
-      },
-      error => {
-        console.log(error);
-      }
+      data => this.router.navigate(['/login']),
+      error => this.createToast(error)
     );
+  }
+
+
+  async createToast(error){
+    if(error.status === 0){
+      error.error.detail = 'Lost Connection';
+    }
+
+    const toast = await this.toastController.create({
+      header: 'Error ',
+      message: error.error.detail,
+      position: 'top',
+      duration: 5000,
+      buttons:[
+        {
+          text: 'X',
+          role: 'cancel'
+        }
+      ]
+    });
+    await toast.present();
   }
 }

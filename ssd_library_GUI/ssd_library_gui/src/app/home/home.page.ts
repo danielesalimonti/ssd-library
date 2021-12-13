@@ -3,6 +3,7 @@ import {Book} from '../model/book';
 import {Router} from '@angular/router';
 import {BookService} from '../../services/book.service';
 import {AuthService} from '../../services/auth.service';
+import {ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,9 @@ export class HomePage implements OnInit {
 
   constructor(private router: Router,
               private bookService: BookService,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private toastController: ToastController) {
+
     if(!this.auth.isLogged()) {
       this.router.navigate(['/login']);
     }
@@ -33,12 +36,11 @@ export class HomePage implements OnInit {
         this.updateButtons();
       },
       error => {
-        console.log(error);
-        if(error.status === 403) {
-          this.router.navigate(['/login']);
-        }else{
-          //router.navigate(['/error-page', error]);
+        if(error.status === 0){
+          error.error.detail = 'Lost Connection';
         }
+        localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
+        this.router.navigate(['/login']);
       });
   }
 
@@ -51,10 +53,7 @@ export class HomePage implements OnInit {
         });
         this.loadingMyBooks = false;
       },
-      error => {
-        console.log('error'+error);
-        //router.navigate(['/error-page', error]);
-      });
+      error => this.createToast(error));
   }
 
   rent(isbn){
@@ -63,14 +62,35 @@ export class HomePage implements OnInit {
         this.isMyBook.push(isbn);
         this.router.navigate(['/book/',isbn]);
         },
-      error => console.log(error)
+      error => this.createToast(error)
     );
   }
 
   logout(){
     this.auth.logout().subscribe(
       data => this.router.navigate(['/login']),
-      error => console.log(error)
+      error => this.createToast(error)
     );
+  }
+
+
+  async createToast(error){
+    if(error.status === 0){
+      error.error.detail = 'Lost Connection';
+    }
+
+    const toast = await this.toastController.create({
+      header: 'Error ',
+      message: error.error.detail,
+      position: 'top',
+      duration: 5000,
+      buttons:[
+        {
+          text: 'X',
+          role: 'cancel'
+        }
+      ]
+    });
+    await toast.present();
   }
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
+import {AlertController} from "@ionic/angular";
 
 @Component({
   selector: 'app-login',
@@ -10,8 +11,18 @@ import {AuthService} from '../../services/auth.service';
 })
 export class LoginPage implements OnInit {
 
-  usernameFC: FormControl = new FormControl('', Validators.required);
-  passwordFC: FormControl = new FormControl('', Validators.required);
+  error = false;
+
+  usernameFC: FormControl = new FormControl('',
+    [Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(20),
+    Validators.pattern('^[a-zA-Z0-9\.\_\!\?\%\&\$]+$')]);
+  passwordFC: FormControl = new FormControl('',
+    [Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(20),
+      Validators.pattern('^[a-zA-Z0-9\.\_\!\?\%\&\$]+$')]);
 
   loginFG: FormGroup = new FormGroup({
     username: this.usernameFC,
@@ -36,7 +47,7 @@ export class LoginPage implements OnInit {
           this.passwordFC.setValue('');
         },
         error => {
-          console.log(error);
+          this.error = true;
         }
       );
     }
