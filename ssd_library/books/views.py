@@ -41,7 +41,7 @@ class BookRentedList(generics.ListAPIView):
 class BookRentedDetail(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializerForRentedBooks
-    permission_classes = [AreRentedBook, IsAuthenticated]
+    permission_classes = [IsAuthenticated, AreRentedBook]
 
 
 class BookRent(generics.GenericAPIView):

@@ -55,11 +55,10 @@ def test_books_get_list_authenticated(books):
 
 
 def test_get_non_mine_book(books):
-    path = reverse('my-books') + '/' + books[0].ISBN + '/'
+    path = reverse('my-books') + books[0].ISBN + '/'
     user = mixer.blend(get_user_model())
     client = get_client(user)
     response = client.get(path)
-    print(books[0].user_rented)
     assert response.status_code == HTTP_403_FORBIDDEN
 
 
@@ -67,10 +66,10 @@ def test_rent_and_get_mine_book(books):
     path = '/api/v1/rent/' + books[0].ISBN + '/'
     user = mixer.blend(get_user_model())
     client = get_client(user)
+    client.get(path)
+    path = reverse('my-books') + books[0].ISBN + '/'
     response = client.get(path)
-    path = reverse('my-books') + '/' + books[0].ISBN + '/'
-    response = client.get(path)
-    print(books[0].user_rented)
+    print(books[0].ISBN)
     assert response.status_code == HTTP_200_OK
 
 
