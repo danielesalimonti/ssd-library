@@ -190,10 +190,6 @@ class App:
         print(f"# PAGES: {book['num_pages']}")
         print()
 
-    @staticmethod
-    def welcome():
-        print("-------- Welcome to our library --------")
-
     def run(self):
         self.__login_menu.run()
 
