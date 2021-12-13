@@ -35,11 +35,8 @@ class Book(models.Model):
         return json.loads(self._user_rented)['users']
 
     def add_user_rent(self, username):
-        print("SONO QUAAA")
         print(username)
         if username not in self.user_rented:
-            print("SONO QUAAA2")
             self._user_rented = json.dumps({'users': self.user_rented + [username]})
             self.save()
-            print("SONO QUAAA3")
 

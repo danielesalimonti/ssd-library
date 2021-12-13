@@ -39,6 +39,17 @@ class App:
         print()
         self.__library_menu.run()
 
+    @staticmethod
+    def __input_parameter(param):
+        is_valid = False
+        val: str = " "
+        while not is_valid:
+            val = input(f"{param}: ")
+            if len(val.strip()) != 0:
+                is_valid = True
+
+        return val
+
     def __do_logout(self):
         if self.__access_token == "":
             print()
@@ -52,27 +63,26 @@ class App:
         self.__access_token = ""
 
     def __do_login(self):
-        username = input("Username: ")
-        password = input("Password: ")
+        username = self.__input_parameter("Username")
+        password = self.__input_parameter("Password")
 
         res = requests.post(url=f'{self.api}/auth/login/', data={'username': {username}, 'password': {password}})
         if res.status_code != 200:
             print(res.content)
             return
 
-        json = res.json()
-        self.__access_token = json['key']
+        res_json = res.json()
+        self.__access_token = res_json['key']
         print("Login successful!\n")
         self.__library_menu.run()
 
-    @staticmethod
-    def __do_registration():
-        username = input("Username: ")
-        password = input("Password: ")
-        email = input("Email: ")
+    def __do_registration(self):
+        username = App.__input_parameter("Username")
+        password = App.__input_parameter("Password")
+        email = App.__input_parameter("Email")
 
         res = requests.post(url=f'{App.api}/auth/registration/', data={"username": {username}, "password1": {password},
-                                                                        "password2": {password}, "email": {email}})
+                                                                       "password2": {password}, "email": {email}})
 
         if res.status_code != 201:
             print(res.content)
@@ -189,7 +199,10 @@ class App:
 
 
 def main():
-    App().run()
+    try:
+        App().run()
+    except:
+        print("FATAL ERROR!")
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ class Description:
 
     def __post_init__(self):
         validate_dataclass(self)
-        validate('Pattern', value=self.desc, min_len=1, max_len=200, custom=matches_pattern(self.__regex))
+        validate('Pattern', value=self.desc, min_len=1, max_len=100, custom=matches_pattern(self.__regex))
 
     def __str__(self):
         return self.desc
