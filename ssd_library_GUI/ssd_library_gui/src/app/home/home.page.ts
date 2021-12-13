@@ -3,7 +3,8 @@ import {Book} from '../model/book';
 import {Router} from '@angular/router';
 import {BookService} from '../../services/book.service';
 import {AuthService} from '../../services/auth.service';
-import {ToastController} from "@ionic/angular";
+import {ToastController} from '@ionic/angular';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -16,11 +17,14 @@ export class HomePage implements OnInit {
   loadingMyBooks = true;
   books: Book[] = [];
   isMyBook: string[] = [];
+  searchField: FormControl = new FormControl('');
+  orderField: FormControl = new FormControl('');
 
   constructor(private router: Router,
               private bookService: BookService,
               private auth: AuthService,
-              private toastController: ToastController) {
+              private toastController: ToastController,
+              ) {
 
     if(!this.auth.isLogged()) {
       this.router.navigate(['/login']);
@@ -42,6 +46,25 @@ export class HomePage implements OnInit {
         localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
         this.router.navigate(['/login']);
       });
+  }
+
+  filter(books: Book[]): Book[]{
+    return books.filter(b => this.searchField.value === ''
+      || b.ISBN.includes(this.searchField.value)
+      || b.title.toLowerCase().includes(this.searchField.value.toLowerCase())
+      || b.author.toLowerCase().includes(this.searchField.value.toLowerCase()));
+  }
+
+  sort(books: Book[]): Book[]{
+    return books.sort( (a, b) => {
+      console.log(this.orderField.value);
+      switch(this.orderField.value){
+        case 'ISBN': return a.ISBN > b.ISBN ? 1 : 0;
+        case 'Title': return a.title > b.title ? 1 : 0;
+        case 'Author': return a.author > b.author ? 1 : 0;
+        case 'PublishDate': return a.published_date > b.published_date ? 1 : 0;
+        default: return 0;
+      }});
   }
 
   updateButtons(){
