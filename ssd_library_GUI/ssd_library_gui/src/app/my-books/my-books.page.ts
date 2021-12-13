@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {BookService} from '../../services/book.service';
 import {AlertController, ToastController} from "@ionic/angular";
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-my-books',
@@ -14,6 +15,8 @@ export class MyBooksPage implements OnInit {
 
   loadingBooks = true;
   myBooks: Book[] = [];
+  searchField: FormControl = new FormControl('');
+  orderField: FormControl = new FormControl('');
 
   constructor(public router: Router,
               private bookService: BookService,
@@ -40,6 +43,24 @@ export class MyBooksPage implements OnInit {
       });
   }
 
+
+  filter(books: Book[]): Book[]{
+    return books.filter(b => this.searchField.value === ''
+      || b.ISBN.includes(this.searchField.value)
+      || b.title.toLowerCase().includes(this.searchField.value.toLowerCase())
+      || b.author.toLowerCase().includes(this.searchField.value.toLowerCase()));
+  }
+
+  sort(books: Book[]): Book[]{
+    return books.sort( (a, b) => {
+      switch(this.orderField.value){
+        case 'ISBN': return a.ISBN > b.ISBN ? 1 : 0;
+        case 'Title': return a.title > b.title ? 1 : 0;
+        case 'Author': return a.author > b.author ? 1 : 0;
+        case 'PublishDate': return a.published_date > b.published_date ? 1 : 0;
+        default: return 0;
+      }});
+  }
 
   logout(){
     this.auth.logout().subscribe(

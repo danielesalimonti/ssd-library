@@ -15,7 +15,18 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
+  <ion-toolbar>
+    <ion-searchbar showCancelButton="focus" placeholder="Search by title, author or ISBN" [formControl]="searchField"></ion-searchbar>
+    <ion-item>
+      <ion-label>Order by</ion-label>
+      <ion-select placeholder="Normal" [formControl]="orderField">
+        <ion-select-option value="ISBN">ISBN</ion-select-option>
+        <ion-select-option value="Title">Title</ion-select-option>
+        <ion-select-option value="Author">Author</ion-select-option>
+        <ion-select-option value="PublishDate">Date</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-toolbar>
 
   <ion-list [hidden]="!loadingBooks">
     <ion-item>
@@ -24,7 +35,7 @@
   </ion-list>
 
   <ion-list [hidden]="loadingBooks">
-    <ion-item *ngFor="let book of books">
+    <ion-item *ngFor="let book of sort(filter(books))">
       <ion-card style="padding: 5px; width: 100%">
         <ion-card-header>
           <ion-card-title>{{book.title}}</ion-card-title>
