@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Book} from '../model/book';
 import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {BookService} from '../../services/book.service';
+import {ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'app-book',
@@ -9,18 +12,60 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class BookPage implements OnInit {
 
+  isbn: string;
   book: Book;
 
-  constructor(public activatedRoute: ActivatedRoute, public router: Router) {
-    const isbn = this.activatedRoute.snapshot.params['isbn'];
-    console.log(isbn);
-    // eslint-disable-next-line max-len
-    this.book = new Book(isbn, 'Tiziano Sclavi', 'Nero', 'libro', "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      new Date(), 125
-    );
+  constructor(private activatedRoute: ActivatedRoute,
+              public router: Router,
+              private auth: AuthService,
+              private bookService: BookService,
+              private toastController: ToastController) {
+
+    if(!this.auth.isLogged()) {
+      this.router.navigate(['/login']);
+    }
+
+    this.isbn = this.activatedRoute.snapshot.params.isbn;
   }
 
   ngOnInit() {
+    this.bookService.showBook(this.isbn).subscribe(
+      data => this.book = data,
+      error => {
+
+        if(error.status === 0){
+          error.error.detail = 'Lost Connection';
+        }
+        localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
+        this.router.navigate(['/error-page']);
+      }
+    );
   }
 
+  logout(){
+    this.auth.logout().subscribe(
+      data => this.router.navigate(['/login']),
+      error => this.createToast(error)
+    );
+  }
+
+  async createToast(error){
+    if(error.status === 0){
+      error.error.detail = 'Lost Connection';
+    }
+
+    const toast = await this.toastController.create({
+      header: 'Error ',
+      message: error.error.detail,
+      position: 'top',
+      duration: 5000,
+      buttons:[
+        {
+          text: 'X',
+          role: 'cancel'
+        }
+      ]
+    });
+    await toast.present();
+  }
 }

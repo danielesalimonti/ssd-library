@@ -1,21 +1,34 @@
 <ion-content>
   <div id="login-form">
     <form [formGroup]="loginFG">
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input type="text" [formControl]="emailFC"></ion-input>
-      </ion-item>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Library</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="text" [formControl]="usernameFC" (focusin)="error=false"></ion-input>
+          </ion-item>
 
-      <ion-item lines="full">
-        <ion-label position="floating">Password</ion-label>
-        <ion-input type="password" [formControl]="passwordFC"></ion-input>
-      </ion-item>
+          <ion-item lines="full">
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" [formControl]="passwordFC" (focusin)="error=false"></ion-input>
+          </ion-item>
 
-      <ion-row>
-        <ion-col>
-          <ion-button type="submit" color="primary" expand="block" (click)="logIn()">Sign In</ion-button>
-        </ion-col>
-      </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button type="submit" color="primary" expand="block" [disabled]="!loginFG.valid" (click)="logIn()">Sign In</ion-button>
+            </ion-col>
+          </ion-row>
+
+          <div class="validation-errors">
+            <div class="error-message" [hidden]="!error">
+              Username or password is not correct!
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
     </form>
   </div>
 </ion-content>

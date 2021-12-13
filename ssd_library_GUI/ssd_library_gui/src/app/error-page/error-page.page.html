@@ -1,9 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>error-page</ion-title>
+    <ion-title>Library</ion-title>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="router.navigate(['/home'])">
+        <span>Library</span>
+      </ion-button>
+      <ion-button (click)="router.navigate(['/my-books'])">
+        <span>My books</span>
+      </ion-button>
+      <ion-button (click)="logout()">
+        <span>Exit</span>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <h1>Error {{status}}</h1>
+  <h2>Error {{status}}: {{message}}</h2>
 </ion-content>

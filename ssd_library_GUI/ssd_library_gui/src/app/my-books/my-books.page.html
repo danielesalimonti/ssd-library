@@ -7,8 +7,8 @@
       <ion-button (click)="router.navigate(['/home'])">
         <span>Library</span>
       </ion-button>
-      <ion-button (click)="0">
-        <span>Esci</span>
+      <ion-button (click)="logout()">
+        <span>Exit</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -16,14 +16,32 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list>
+  <ion-list *ngIf="loadingBooks">
+    <ion-item>
+      <ion-spinner name="crescent"></ion-spinner>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!loadingBooks && myBooks.length === 0">
+    <ion-item>
+      <ion-card style="padding: 5px; width: 100%">
+        <ion-card-header>
+          <ion-card-title>Non hai noleggiato nessun libro.</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!loadingBooks">
     <ion-item *ngFor="let book of myBooks">
       <ion-card style="padding: 5px; width: 100%">
         <ion-card-header>
           <ion-card-title>{{book.title}}</ion-card-title>
-          <ion-card-subtitle>{{book.author}}</ion-card-subtitle>
-          <ion-button style="float: right" color="success" (click)="router.navigate(['/book', book.isbn])">Leggi</ion-button>
+          <ion-card-subtitle>{{book.ISBN + ' - '+ book.author}}</ion-card-subtitle>
+          <ion-card-subtitle>Published Date: {{book.published_date}}</ion-card-subtitle>
+          <ion-card-subtitle>Num. Pages: {{book.num_pages}}</ion-card-subtitle>
         </ion-card-header>
+        <ion-button style="float: right" color="success" (click)="router.navigate(['/book', book.ISBN])">Read</ion-button>
       </ion-card>
     </ion-item>
   </ion-list>

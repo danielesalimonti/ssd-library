@@ -9,3 +9,8 @@
   -webkit-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
 }
+
+.validation-errors {
+  font-size: small;
+  color: var(--ion-color-danger, #f1453d);
+}
