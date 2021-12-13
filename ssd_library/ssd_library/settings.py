@@ -61,8 +61,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGIN = [
-    'http://localhost:8000'
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+    'http://localhost:8100',
+    'http://localhost:4200',
 ]
 
 ROOT_URLCONF = 'ssd_library.urls'

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {Book} from '../model/book';
 import {Router} from '@angular/router';
+import {BookService} from '../../services/book.service';
 
 @Component({
   selector: 'app-home',
@@ -9,15 +10,15 @@ import {Router} from '@angular/router';
 })
 export class HomePage {
 
+  loading = true;
   books: Book[] = [];
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private bookService: BookService) {
 
-    this.books.push(new Book('321312312', 'Tiziano Sclavi', 'Nero', 'libro', 'An horror book...',
-      new Date(), 125
-    ),
-      new Book('32131sda2', 'ALtro Autore', 'Boh', 'libro', 'A comic book...',
-        new Date(), 138)
-    );
+
+    bookService.getBooks().subscribe( (data) =>{
+      this.books = data;
+      this.loading = false;
+    });
   }
 }

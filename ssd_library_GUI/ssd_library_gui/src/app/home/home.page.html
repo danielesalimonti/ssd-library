@@ -16,7 +16,14 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list>
+
+  <ion-list *ngIf="loading">
+    <ion-item>
+      <ion-spinner name="crescent"></ion-spinner>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!loading">
     <ion-item *ngFor="let book of books">
       <ion-card style="padding: 5px; width: 100%">
         <ion-card-header>
