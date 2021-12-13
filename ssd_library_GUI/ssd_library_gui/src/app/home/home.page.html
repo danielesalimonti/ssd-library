@@ -7,8 +7,8 @@
       <ion-button (click)="router.navigate(['/my-books'])">
         <span>My books</span>
       </ion-button>
-      <ion-button (click)="0">
-        <span>Esci</span>
+      <ion-button (click)="logout()">
+        <span>Exit</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -17,24 +17,37 @@
 <ion-content [fullscreen]="true">
 
 
-  <ion-list *ngIf="loading">
+  <ion-list [hidden]="!loadingBooks">
     <ion-item>
       <ion-spinner name="crescent"></ion-spinner>
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="!loading">
+  <ion-list [hidden]="loadingBooks">
     <ion-item *ngFor="let book of books">
       <ion-card style="padding: 5px; width: 100%">
         <ion-card-header>
           <ion-card-title>{{book.title}}</ion-card-title>
-          <ion-card-subtitle>{{book.author}}</ion-card-subtitle>
+          <ion-card-subtitle>{{book.ISBN + ' - '+ book.author}}</ion-card-subtitle>
+          <ion-card-subtitle>Published Date: {{book.published_date}}</ion-card-subtitle>
+          <ion-card-subtitle>Num. Pages: {{book.num_pages}}</ion-card-subtitle>
         </ion-card-header>
+        <hr />
         <ion-card-content>
           {{book.preview}}
         </ion-card-content>
-        <ion-button style="float: right">Noleggia</ion-button>
-        <ion-button style="float: right" color="success" (click)="router.navigate(['/book', book.isbn])">Leggi</ion-button>
+        <hr />
+        <ion-spinner [hidden]="!loadingMyBooks" name="crescent"></ion-spinner>
+        <ion-button [hidden]="loadingMyBooks || !isMyBook.includes(book.ISBN)"
+          style="float: right" color="success"
+          (click)="router.navigate(['/book/', book.ISBN])">
+          Read
+        </ion-button>
+        <ion-button [hidden]="loadingMyBooks || isMyBook.includes(book.ISBN)"
+          style="float: right"
+          (click)="rent(book.ISBN)">
+          Rent
+        </ion-button>
       </ion-card>
     </ion-item>
   </ion-list>

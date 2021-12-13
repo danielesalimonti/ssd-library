@@ -1,6 +1,7 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,18 +10,17 @@ import {Router} from '@angular/router';
 })
 export class LoginPage implements OnInit {
 
-  emailFC: FormControl = new FormControl('', Validators.required);
+  usernameFC: FormControl = new FormControl('', Validators.required);
   passwordFC: FormControl = new FormControl('', Validators.required);
 
   loginFG: FormGroup = new FormGroup({
-    email: this.emailFC,
+    username: this.usernameFC,
     password: this.passwordFC
   });
 
 
-  constructor(private router: Router) {
-
-  }
+  constructor(private router: Router,
+              private auth: AuthService) {}
 
   ngOnInit() {
   }
@@ -28,8 +28,17 @@ export class LoginPage implements OnInit {
   logIn() {
     this.loginFG.markAllAsTouched();
     this.loginFG.updateValueAndValidity();
-    if (this.loginFG.valid && this.emailFC.value === 'admin' && this.passwordFC.value === 'admin') {
-      this.router.navigate(['/home']);
+
+    if (this.loginFG.valid){
+      this.auth.login(this.usernameFC.value, this.passwordFC.value).subscribe(
+        data => {
+          this.router.navigate(['/home']);
+          this.passwordFC.setValue('');
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   }
 
