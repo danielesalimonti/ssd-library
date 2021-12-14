@@ -25,6 +25,9 @@
         <ion-select-option value="Author">Author</ion-select-option>
         <ion-select-option value="PublishDate">Date</ion-select-option>
       </ion-select>
+      <ion-button (click)="orderAscending = !orderAscending">
+        <ion-icon [name]="orderAscending ? 'arrow-down' : 'arrow-up'"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-toolbar>
 

@@ -22,7 +22,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-toolbar *ngIf="!loadingBooks && myBooks.length > 0">
+  <ion-toolbar>
     <ion-searchbar showCancelButton="focus" placeholder="Search by title, author or ISBN" [formControl]="searchField"></ion-searchbar>
     <ion-item>
       <ion-label>Order by</ion-label>
@@ -32,6 +32,9 @@
         <ion-select-option value="Author">Author</ion-select-option>
         <ion-select-option value="PublishDate">Date</ion-select-option>
       </ion-select>
+      <ion-button (click)="orderAscending = !orderAscending">
+        <ion-icon [name]="orderAscending ? 'arrow-down' : 'arrow-up'"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-toolbar>
 

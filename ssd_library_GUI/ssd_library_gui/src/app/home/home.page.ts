@@ -19,6 +19,7 @@ export class HomePage implements OnInit {
   isMyBook: string[] = [];
   searchField: FormControl = new FormControl('');
   orderField: FormControl = new FormControl('');
+  orderAscending = true;
 
   constructor(private router: Router,
               private bookService: BookService,
@@ -57,14 +58,16 @@ export class HomePage implements OnInit {
 
   sort(books: Book[]): Book[]{
     return books.sort( (a, b) => {
-      console.log(this.orderField.value);
+      let c;
       switch(this.orderField.value){
-        case 'ISBN': return a.ISBN > b.ISBN ? 1 : 0;
-        case 'Title': return a.title > b.title ? 1 : 0;
-        case 'Author': return a.author > b.author ? 1 : 0;
-        case 'PublishDate': return a.published_date > b.published_date ? 1 : 0;
-        default: return 0;
-      }});
+        case 'ISBN': c = a.ISBN.localeCompare(b.ISBN); break;
+        case 'Title': c = a.title.localeCompare(b.title); break;
+        case 'Author': c = a.author.localeCompare(b.author); break;
+        case 'PublishDate': c = a.published_date > b.published_date ? 1 : -1; break;
+        default: return this.orderAscending ? 0 : -1;
+      }
+      return this.orderAscending ? c : -c;
+    });
   }
 
   updateButtons(){
