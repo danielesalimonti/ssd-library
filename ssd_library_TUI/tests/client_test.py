@@ -129,3 +129,61 @@ def test_read_isbn(mock_input: Mock, mock_print: Mock, mock_post: Mock, mock_get
 
     mock_print.assert_any_call("Invalid ISBN, retry!")
     mock_print.assert_any_call("Rented successfully!\n")
+
+
+@pytest.fixture
+def mock_response():
+    class MockedResponse:
+        status_code = 200
+
+        def json(self):
+            return [
+                {'ISBN': '978-134-23-98', 'author': 'a', 'title': 'b', 'text': 'a'*150 + '\na',
+                 'published_date': '21', 'num_pages': '2'}][0]
+
+    return MockedResponse()
+
+
+@patch('requests.post')
+@patch('requests.get')
+@patch('builtins.input', side_effect=['1', 'prova', 'prova', '4', '978-134-23-98', '0', '0'])
+@patch('builtins.print')
+def test_show_rented_book(mock_print: Mock, mock_input: Mock, mock_get: Mock, mock_post: Mock, mock_response):
+    mock_post.return_value.status_code = 200
+    mock_post.return_value.json = lambda: {'key': 'a'}
+
+    mock_get.return_value = mock_response
+    App().run()
+    mock_print.assert_any_call("\n* BOOK DETAIL *")
+    mock_print.assert_any_call(f"# PAGES: {mock_response.json()['num_pages']}")
+
+
+@patch('requests.post')
+@patch('requests.get')
+@patch('builtins.input', side_effect=['1', 'prova', 'prova', '4', '978-134-23-98', '0', '0'])
+@patch('builtins.print')
+def test_show_unrented_book(mock_print: Mock, mock_input: Mock, mock_get: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 200
+    mock_post.return_value.json = lambda: {'key': 'a'}
+
+    mock_get.return_value.status_code = 403
+    App().run()
+    mock_print.assert_any_call("You don't own this book!")
+    assert call("\n* BOOK DETAIL *") not in mock_print.mock_calls
+
+
+@patch('requests.post')
+@patch('requests.get')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['1', 'prova', 'prova', '2', '0', '0'])
+def test_show_my_books_failed(mock_input: Mock, mock_print: Mock, mock_get: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 200
+    mock_post.return_value.json = lambda: {'key': 'a'}
+
+    mock_get.return_value.status_code = 404
+    mock_get.return_value.text = "Not Found!"
+    App().run()
+
+    mock_print.assert_any_call("Not Found!")
+    assert call('-' * 205) not in mock_print.mock_calls
+

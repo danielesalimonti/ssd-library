@@ -167,11 +167,14 @@ class App:
 
         res = requests.get(f'{self.api}/my-books/{isbn_str}/', headers={'Authorization': f'Token {self.__access_token}'})
 
+        if res.status_code == 403:
+            print("You don't own this book!")
+            return
+
         if res.status_code != 200:
             print("Cannot fetch book!")
             return
 
-        print(res.json())
         self.__print_book(res.json())
 
     @staticmethod
@@ -202,9 +205,7 @@ class App:
             print("FATAL ERROR!")
 
 
-def main():
-    App().run()
+def main(name: str):
+    if name == "__main__":
+        App().run()
 
-
-if __name__ == "__main__":
-    main()
