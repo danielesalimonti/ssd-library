@@ -17,3 +17,10 @@ def test_isbn_good_values():
 
     for value in good_values:
         ISBN(value)
+
+
+def test_isbn_str():
+    string = '978-134-23-98'
+    assert str(ISBN(string)) == string
+
+

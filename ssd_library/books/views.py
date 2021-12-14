@@ -19,13 +19,11 @@ class BookListAdmin(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BookList(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
 
 class BookDetail(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 

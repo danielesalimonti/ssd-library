@@ -43,7 +43,7 @@ def test_books_get_list_not_authenticated(books):
     path = reverse('books')
     client = get_client()
     response = client.get(path)
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == HTTP_200_OK
 
 
 def test_books_get_list_authenticated(books):
@@ -58,6 +58,13 @@ def test_get_non_mine_book(books):
     path = reverse('my-books') + books[0].ISBN + '/'
     user = mixer.blend(get_user_model())
     client = get_client(user)
+    response = client.get(path)
+    assert response.status_code == HTTP_403_FORBIDDEN
+
+
+def test_get_non_mine_book_not_authenticated(books):
+    path = reverse('my-books') + books[0].ISBN + '/'
+    client = get_client()
     response = client.get(path)
     assert response.status_code == HTTP_403_FORBIDDEN
 

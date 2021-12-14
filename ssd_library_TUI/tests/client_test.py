@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock, call
 import requests
 
 from ssd_library_TUI.libraryClient import App
-import pytest
+
 
 
 @patch('builtins.input', side_effect=['0'])
