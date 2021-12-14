@@ -103,3 +103,6 @@ def test_menu_handles_wrong_values(mocked_print: Mock, mocked_input: Mock):
 
 
 
+
+
+

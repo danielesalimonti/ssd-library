@@ -1,4 +1,6 @@
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, call
+
+import requests
 
 from ssd_library_TUI.libraryClient import App
 import pytest
@@ -56,3 +58,74 @@ def test_anon_user_cant_access_my_books(mocked_input: Mock, mocked_print: Mock):
     App().run()
 
     mocked_print.assert_any_call("Login into your account first!")
+
+
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['3', '3', '0', '0'])
+def test_anon_user_cant_rent_book(mocked_input: Mock, mocked_print: Mock):
+    App().run()
+
+    mocked_print.assert_any_call("Login into your account first!")
+
+
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['3', '4', '0', '0'])
+def test_anon_user_cant_access_rented_book(mocked_input: Mock, mocked_print: Mock):
+    App().run()
+
+    mocked_print.assert_any_call("Login into your account first!")
+
+
+@patch('requests.post')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['1', 'prova', 'prova'])
+def test_global_exception_handler(mock_input: Mock, mock_print: Mock, mock_post: Mock):
+    mock_post.side_effect = requests.exceptions.RequestException()
+    App().run()
+
+    mock_print.assert_any_call("FATAL ERROR!")
+
+
+@patch('requests.post')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['1', '      ', ' ', 'prova', ' ', 'prova', '0', '0'])
+def test_wrong_value_input(mock_input: Mock, mock_print: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 200
+    mock_post.return_value.json = lambda: {'key': 'a'}
+    App().run()
+
+    mock_print.assert_any_call("Login successful!\n")
+
+
+@patch('requests.post')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['2', ' ', 'prova', ' ', 'prova', 'prova', 'prova@gmail.com', '0', '0'])
+def test_registration(mock_input: Mock, mock_print: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 201
+    App().run()
+
+    mock_print.assert_any_call("Registration successful!\n")
+
+
+@patch('requests.post')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['2', ' ', 'prova', ' ', 'prova', 'prova', 'prova@gmail.com', '0', '0'])
+def test_registration_fail(mock_input: Mock, mock_print: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 403
+    App().run()
+
+    assert call("Registration successful!\n") not in mock_print.mock_calls
+
+
+@patch('requests.get')
+@patch('requests.post')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['1', 'try', 'try', '3', 'aaaaaa--aa', '978-134-A3-98', '978-134-23-98', '0', '0'])
+def test_read_isbn(mock_input: Mock, mock_print: Mock, mock_post: Mock, mock_get: Mock):
+    mock_post.return_value.status_code = 200
+    mock_get.return_value.status_code = 200
+    mock_post.return_value.json = lambda: {'key': 'a'}
+    App().run()
+
+    mock_print.assert_any_call("Invalid ISBN, retry!")
+    mock_print.assert_any_call("Rented successfully!\n")
