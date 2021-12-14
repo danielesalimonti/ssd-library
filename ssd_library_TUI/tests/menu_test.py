@@ -13,6 +13,12 @@ def test_menu_description_is_str():
         Description(None)
         Description(['ciao', 'mondo'])
 
+    with pytest.raises(TypeError):
+        Description(2)
+
+    with pytest.raises(TypeError):
+        Description(None)
+
 
 def test_menu_description_valid():
     good_values = ['prova', 'Hello World', 'Description! ', 'Type 20 commands.']

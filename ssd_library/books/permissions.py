@@ -9,3 +9,4 @@ class AreRentedBook(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return str(request.user) in obj.user_rented
 
+
