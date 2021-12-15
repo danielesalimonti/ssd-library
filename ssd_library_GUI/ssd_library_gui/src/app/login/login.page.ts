@@ -72,7 +72,7 @@ export class LoginPage implements OnInit {
     if (this.loginFG.valid){
       this.auth.login(this.usernameLFC.value, this.passwordLFC.value).subscribe(
         data => {
-          this.router.navigate(['/home']);
+          this.router.navigateByUrl('/home', {replaceUrl: true});
           this.loginFG.reset();
         },
         error => {
@@ -89,7 +89,7 @@ export class LoginPage implements OnInit {
     if (this.registerFG.valid){
       this.auth.register(this.usernameRFC.value, this.emailRFC.value, this.passwordRFC1.value).subscribe(
         data => {
-          this.router.navigate(['/home']);
+          this.router.navigateByUrl('/home', {replaceUrl: true});
           this.registerFG.reset();
         },
         error => {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Book} from '../model/book';
 import {Router} from '@angular/router';
 import {BookService} from '../../services/book.service';
@@ -25,28 +25,28 @@ export class HomePage implements OnInit {
               private bookService: BookService,
               private auth: AuthService,
               private toastController: ToastController,
-              ) {
-
-    if(!this.auth.isLogged()) {
-      this.router.navigate(['/login']);
-    }
-  }
+              ) {  }
 
   ngOnInit() {
-    this.bookService.getAllBooks().subscribe(
-      (data) => {
-        this.books = data;
-        this.loadingBooks = false;
+    if(!this.auth.isLogged()) {
+      this.router.navigateByUrl('/login', {replaceUrl: true});
+    }else {
 
-        this.updateButtons();
-      },
-      error => {
-        if(error.status === 0){
-          error.error.detail = 'Lost Connection';
-        }
-        localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
-        this.router.navigate(['/login']);
-      });
+      this.bookService.getAllBooks().subscribe(
+        (data) => {
+          this.books = data;
+          this.loadingBooks = false;
+
+          this.updateButtons();
+        },
+        error => {
+          if (error.status === 0) {
+            error.error.detail = 'Lost Connection';
+          }
+          localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
+          this.router.navigateByUrl('/error-page', {replaceUrl: true})
+        });
+    }
   }
 
   filter(books: Book[]): Book[]{
@@ -94,7 +94,7 @@ export class HomePage implements OnInit {
 
   logout(){
     this.auth.logout().subscribe(
-      data => this.router.navigate(['/login']),
+      data => this.router.navigateByUrl('/login', {replaceUrl: true}),
       error => this.createToast(error)
     );
   }
