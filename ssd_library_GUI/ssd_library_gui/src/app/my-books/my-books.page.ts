@@ -25,7 +25,7 @@ export class MyBooksPage implements OnInit {
               private toastController: ToastController) {
 
     if(!this.auth.isLogged()) {
-      this.router.navigate(['/login']);
+      this.router.navigateByUrl('/login', {replaceUrl: true});
     }
   }
 
@@ -40,7 +40,7 @@ export class MyBooksPage implements OnInit {
           error.error.detail = 'Lost Connection';
         }
         localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
-        this.router.navigate(['/login']);
+        this.router.navigateByUrl('/login', {replaceUrl: true});
       });
   }
 
@@ -68,7 +68,7 @@ export class MyBooksPage implements OnInit {
 
   logout(){
     this.auth.logout().subscribe(
-      data => this.router.navigate(['/login']),
+      data => this.router.navigateByUrl('/login', {replaceUrl: true}),
       error => this.createToast(error)
     );
   }

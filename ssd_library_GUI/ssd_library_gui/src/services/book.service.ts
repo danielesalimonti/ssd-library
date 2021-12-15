@@ -13,7 +13,7 @@ export class BookService {
               private auth: AuthService) { }
 
   getAllBooks(){
-    return this.http.get<Book[]>(environment.backend_url+'/', this.getHeader());
+    return this.http.get<Book[]>(environment.backend_url+'/');
   }
 
   getMyBooks(){

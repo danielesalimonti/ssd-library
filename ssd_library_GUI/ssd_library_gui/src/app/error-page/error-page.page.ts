@@ -17,14 +17,10 @@ export class ErrorPagePage implements OnInit {
               private auth: AuthService,
               private toastController: ToastController) {
 
-    if(!this.auth.isLogged()) {
-      this.router.navigate(['/login']);
-    }
-
     const e: string = localStorage.getItem('error');
 
     if(e === null || e === undefined || e === '') {
-      this.router.navigate(['/home']);
+      this.router.navigateByUrl('/home', {replaceUrl: true});
     }else{
       const json = JSON.parse(e);
 
@@ -40,7 +36,7 @@ export class ErrorPagePage implements OnInit {
 
   logout(){
     this.auth.logout().subscribe(
-      data => this.router.navigate(['/login']),
+      data => this.router.navigateByUrl('/login', {replaceUrl: true}),
       error => this.createToast(error)
     );
   }
