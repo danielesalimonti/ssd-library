@@ -4,10 +4,13 @@
       Library
     </ion-title>
     <ion-buttons slot="secondary">
-      <ion-button (click)="router.navigate(['/my-books'])">
+      <ion-button (click)="router.navigateByUrl('/login', {replaceUrl: true})" *ngIf="!isLogged">
+        <span>Login</span>
+      </ion-button>
+      <ion-button (click)="this.router.navigateByUrl('/my-books', {replaceUrl: true})" *ngIf="isLogged">
         <span>My books</span>
       </ion-button>
-      <ion-button (click)="logout()">
+      <ion-button (click)="logout()" *ngIf="isLogged">
         <span>Exit</span>
       </ion-button>
     </ion-buttons>

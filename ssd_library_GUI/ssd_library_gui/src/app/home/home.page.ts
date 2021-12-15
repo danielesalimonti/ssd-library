@@ -13,6 +13,7 @@ import {FormControl} from '@angular/forms';
 })
 export class HomePage implements OnInit {
 
+  isLogged = false;
   loadingBooks = true;
   loadingMyBooks = true;
   books: Book[] = [];
@@ -25,13 +26,11 @@ export class HomePage implements OnInit {
               private bookService: BookService,
               private auth: AuthService,
               private toastController: ToastController,
-              ) {  }
+              ) {
+    this.isLogged = this.auth.isLogged();
+  }
 
   ngOnInit() {
-    if(!this.auth.isLogged()) {
-      this.router.navigateByUrl('/login', {replaceUrl: true});
-    }else {
-
       this.bookService.getAllBooks().subscribe(
         (data) => {
           this.books = data;
@@ -46,7 +45,6 @@ export class HomePage implements OnInit {
           localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
           this.router.navigateByUrl('/error-page', {replaceUrl: true})
         });
-    }
   }
 
   filter(books: Book[]): Book[]{
@@ -71,25 +69,33 @@ export class HomePage implements OnInit {
   }
 
   updateButtons(){
-    this.bookService.getMyBooks().subscribe(
-      (myBooks) => {
-        this.isMyBook = [];
-        myBooks.forEach( (b) => {
-          this.isMyBook.push(b.ISBN);
-        });
-        this.loadingMyBooks = false;
-      },
-      error => this.createToast(error));
+    if(this.isLogged) {
+      this.bookService.getMyBooks().subscribe(
+        (myBooks) => {
+          this.isMyBook = [];
+          myBooks.forEach((b) => {
+            this.isMyBook.push(b.ISBN);
+          });
+          this.loadingMyBooks = false;
+        },
+        error => this.createToast(error));
+    }else{
+      this.loadingMyBooks = false;
+    }
   }
 
   rent(isbn){
-    this.bookService.rentBook(isbn).subscribe(
-      data => {
-        this.isMyBook.push(isbn);
-        this.router.navigate(['/book/',isbn]);
+    if(!this.isLogged){
+      this.router.navigateByUrl('/login', {replaceUrl: true})
+    }else {
+      this.bookService.rentBook(isbn).subscribe(
+        data => {
+          this.isMyBook.push(isbn);
+          this.router.navigate(['/book/', isbn]);
         },
-      error => this.createToast(error)
-    );
+        error => this.createToast(error)
+      );
+    }
   }
 
   logout(){
