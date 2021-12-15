@@ -34,4 +34,14 @@ export class AuthService {
       })
     );
   }
+
+  register(username, email, password){
+    return this.http.post(environment.backend_url+'/auth/registration/', {username, email, password1: password, password2: password})
+      .pipe(
+        map( (result: any) => {
+          localStorage.setItem('token', result.key);
+          return true;
+        })
+      );
+  }
 }

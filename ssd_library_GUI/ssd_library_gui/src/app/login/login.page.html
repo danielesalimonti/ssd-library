@@ -5,15 +5,19 @@
         <ion-card-header>
           <ion-card-title>Library</ion-card-title>
         </ion-card-header>
-        <ion-card-content>
+        <ion-item>
+          <ion-button fill="clear" expand="block" [disabled]="false" (click)="showLogin = true">Login</ion-button>
+          <ion-button fill="clear" expand="block" [disabled]="false" (click)="showLogin = false">Register</ion-button>
+        </ion-item>
+        <ion-card-content *ngIf="showLogin">
           <ion-item>
             <ion-label position="floating">Username</ion-label>
-            <ion-input type="text" [formControl]="usernameFC" (focusin)="error=false"></ion-input>
+            <ion-input type="text" [formControl]="usernameLFC" (focusin)="error=false"></ion-input>
           </ion-item>
 
           <ion-item lines="full">
             <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" [formControl]="passwordFC" (focusin)="error=false"></ion-input>
+            <ion-input type="password" [formControl]="passwordLFC" (focusin)="error=false"></ion-input>
           </ion-item>
 
           <ion-row>
@@ -25,6 +29,39 @@
           <div class="validation-errors">
             <div class="error-message" [hidden]="!error">
               Username or password is not correct!
+            </div>
+          </div>
+        </ion-card-content>
+        <ion-card-content *ngIf="!showLogin">
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="text" [formControl]="emailRFC" (focusin)="error=false"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input type="text" [formControl]="usernameRFC" (focusin)="error=false"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" [formControl]="passwordRFC1" (focusin)="error=false"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Repeat Password</ion-label>
+            <ion-input type="password" [formControl]="passwordRFC2" (focusin)="error=false"></ion-input>
+          </ion-item>
+
+          <ion-row>
+            <ion-col>
+              <ion-button type="submit" color="primary" expand="block" [disabled]="!registerFG.valid" (click)="register()">Sign Up</ion-button>
+            </ion-col>
+          </ion-row>
+
+          <div class="validation-errors">
+            <div class="error-message" [hidden]="!error">
+              {{registrationError}}
             </div>
           </div>
         </ion-card-content>
