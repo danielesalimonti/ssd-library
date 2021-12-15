@@ -8,6 +8,7 @@ from valid8 import ValidationError
 
 from ssd_library_TUI.menu.menu import Menu, Command
 from ssd_library_TUI.misc.models import ISBN
+from ssd_library_TUI.misc.regex import matches_pattern
 
 
 @typeguard.typechecked
@@ -45,8 +46,10 @@ class App:
         val: str = " "
         while not is_valid:
             val = input(f"{param}: ")
-            if len(val.strip()) != 0:
-                is_valid = True
+            if len(val.strip()) == 0:
+                continue
+
+            is_valid = True
 
         return val
 
@@ -93,6 +96,7 @@ class App:
     def fetch_books(self):
         res = requests.get(url=f'{self.api}/', headers={'Authorization': f'Token {self.__access_token}'})
         if res.status_code != 200:
+            print("Cannot fetch books!")
             return None
 
         self.__print_books(res.json())
@@ -163,11 +167,14 @@ class App:
 
         res = requests.get(f'{self.api}/my-books/{isbn_str}/', headers={'Authorization': f'Token {self.__access_token}'})
 
+        if res.status_code == 403:
+            print("You don't own this book!")
+            return
+
         if res.status_code != 200:
             print("Cannot fetch book!")
             return
 
-        print(res.json())
         self.__print_book(res.json())
 
     @staticmethod
@@ -191,15 +198,14 @@ class App:
         print()
 
     def run(self):
-        self.__login_menu.run()
+        try:
+            self.__login_menu.run()
+        except Exception as e:
+            print(e)
+            print("FATAL ERROR!")
 
 
-def main():
-    try:
+def main(name: str):
+    if name == "__main__":
         App().run()
-    except:
-        print("FATAL ERROR!")
 
-
-if __name__ == "__main__":
-    main()

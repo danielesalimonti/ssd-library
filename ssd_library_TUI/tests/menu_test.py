@@ -13,6 +13,12 @@ def test_menu_description_is_str():
         Description(None)
         Description(['ciao', 'mondo'])
 
+    with pytest.raises(TypeError):
+        Description(2)
+
+    with pytest.raises(TypeError):
+        Description(None)
+
 
 def test_menu_description_valid():
     good_values = ['prova', 'Hello World', 'Description! ', 'Type 20 commands.']
@@ -91,6 +97,9 @@ def test_menu_handles_wrong_values(mocked_print: Mock, mocked_input: Mock):
     menu.run()
     mocked_print.assert_any_call('Invalid command, retry!')
     mocked_print.assert_any_call("Hello")
+
+
+
 
 
 
