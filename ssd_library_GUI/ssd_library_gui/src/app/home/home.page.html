@@ -1,20 +1,23 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>
       Library
     </ion-title>
     <ion-buttons slot="secondary">
-      <ion-button (click)="router.navigate(['/my-books'])">
+      <ion-button (click)="router.navigateByUrl('/login', {replaceUrl: true})" *ngIf="!isLogged">
+        <span>Login</span>
+      </ion-button>
+      <ion-button (click)="this.router.navigateByUrl('/my-books', {replaceUrl: true})" *ngIf="isLogged">
         <span>My books</span>
       </ion-button>
-      <ion-button (click)="logout()">
+      <ion-button (click)="logout()" *ngIf="isLogged">
         <span>Exit</span>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-toolbar>
     <ion-searchbar showCancelButton="focus" placeholder="Search by title, author or ISBN" [formControl]="searchField"></ion-searchbar>
     <ion-item>

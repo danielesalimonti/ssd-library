@@ -14,7 +14,7 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  isLogged(){ return this.getToken() !== '';}
+  isLogged(){ return this.getToken() !== null && this.getToken() !== undefined && this.getToken() !== '';}
 
   login(username, password){
     return this.http.post(environment.backend_url+'/auth/login/', {username, password})
@@ -33,5 +33,15 @@ export class AuthService {
         return value;
       })
     );
+  }
+
+  register(username, email, password){
+    return this.http.post(environment.backend_url+'/auth/registration/', {username, email, password1: password, password2: password})
+      .pipe(
+        map( (result: any) => {
+          localStorage.setItem('token', result.key);
+          return true;
+        })
+      );
   }
 }

@@ -22,7 +22,7 @@ export class BookPage implements OnInit {
               private toastController: ToastController) {
 
     if(!this.auth.isLogged()) {
-      this.router.navigate(['/login']);
+      this.router.navigateByUrl('/login', {replaceUrl: true});
     }
 
     this.isbn = this.activatedRoute.snapshot.params.isbn;
@@ -37,14 +37,14 @@ export class BookPage implements OnInit {
           error.error.detail = 'Lost Connection';
         }
         localStorage.setItem('error', JSON.stringify({status: error.status, message: error.error.detail}));
-        this.router.navigate(['/error-page']);
+        this.router.navigateByUrl('/error-page', {replaceUrl: true});
       }
     );
   }
 
   logout(){
     this.auth.logout().subscribe(
-      data => this.router.navigate(['/login']),
+      data => this.router.navigateByUrl('/login', {replaceUrl: true}),
       error => this.createToast(error)
     );
   }
