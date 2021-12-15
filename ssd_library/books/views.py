@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -49,11 +48,8 @@ class BookRent(generics.GenericAPIView):
             try:
                 book = Book.objects.get(ISBN=isbn)
             except Book.DoesNotExist:
-                return HttpResponse(json.dumps({'detail': 'Book not found'}), content_type="application/json",
-                                    status=404)
-
+                return HttpResponse(json.dumps({'detail': 'Book not found'}), content_type="application/json",status=404)
             book.add_user_rent(str(request.user))
             return redirect('/../../api/v1/')
-
         content = {'Message': 'Unauthenticated'}
         return Response(content, status=403)
