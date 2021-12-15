@@ -58,7 +58,7 @@ def test_guest_login_show_all_books(mocked_get: Mock, mocked_input: Mock, mocked
 def test_anon_user_cant_access_my_books(mocked_input: Mock, mocked_print: Mock):
     App().run()
 
-    mocked_print.assert_any_call("Login into your account first!")
+    mocked_print.assert_any_call("Login into your account first!\n")
 
 
 @patch('builtins.print')
@@ -66,7 +66,7 @@ def test_anon_user_cant_access_my_books(mocked_input: Mock, mocked_print: Mock):
 def test_anon_user_cant_rent_book(mocked_input: Mock, mocked_print: Mock):
     App().run()
 
-    mocked_print.assert_any_call("Login into your account first!")
+    mocked_print.assert_any_call("Login into your account first!\n")
 
 
 @patch('builtins.print')
@@ -74,7 +74,7 @@ def test_anon_user_cant_rent_book(mocked_input: Mock, mocked_print: Mock):
 def test_anon_user_cant_access_rented_book(mocked_input: Mock, mocked_print: Mock):
     App().run()
 
-    mocked_print.assert_any_call("Login into your account first!")
+    mocked_print.assert_any_call("Login into your account first!\n")
 
 
 @patch('requests.post')

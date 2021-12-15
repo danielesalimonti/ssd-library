@@ -95,7 +95,7 @@ class App:
         print("Registration successful!\n")
 
     def fetch_books(self):
-        res = requests.get(url=f'{self.api}/', headers={'Authorization': f'Token {self.__access_token}'})
+        res = requests.get(url=f'{self.api}/')
         if res.status_code != 200:
             print("Cannot fetch books!")
             return None
@@ -104,7 +104,7 @@ class App:
 
     def fetch_my_books(self):
         if self.__access_token == "":
-            print("Login into your account first!")
+            print("Login into your account first!\n")
             return
 
         res = requests.get(url=f'{self.api}/my-books/', headers={'Authorization': f'Token {self.__access_token}'})
@@ -146,7 +146,7 @@ class App:
 
     def rent_book(self):
         if self.__access_token == "":
-            print("Login into your account first!")
+            print("Login into your account first!\n")
             return
 
         isbn_str: str = self.__read_isbn()
@@ -161,7 +161,7 @@ class App:
 
     def show_book(self):
         if self.__access_token == "":
-            print("Login into your account first!")
+            print("Login into your account first!\n")
             return
 
         isbn_str: str = self.__read_isbn()
