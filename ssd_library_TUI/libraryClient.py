@@ -60,7 +60,8 @@ class App:
 
         res = requests.post(url=f'{self.api}/auth/logout/', headers={'Authentication': f'Token {self.__access_token}'})
         if res.status_code != 200:
-            print(res.text)
+            print("Error during logout!")
+            return
 
         print("Logout successful!\n")
         self.__access_token = ""
@@ -71,7 +72,7 @@ class App:
 
         res = requests.post(url=f'{self.api}/auth/login/', data={'username': {username}, 'password': {password}})
         if res.status_code != 200:
-            print(res.content)
+            print("Cannot login!")
             return
 
         res_json = res.json()
@@ -88,7 +89,7 @@ class App:
                                                                        "password2": {password}, "email": {email}})
 
         if res.status_code != 201:
-            print(res.content)
+            print("Cannot register!")
             return
 
         print("Registration successful!\n")
@@ -108,7 +109,7 @@ class App:
 
         res = requests.get(url=f'{self.api}/my-books/', headers={'Authorization': f'Token {self.__access_token}'})
         if res.status_code != 200:
-            print(res.text)
+            print("cannot fetch books!")
             return None
 
         self.__print_books(res.json(), is_preview=False)
@@ -201,11 +202,13 @@ class App:
         try:
             self.__login_menu.run()
         except Exception as e:
-            print(e)
             print("FATAL ERROR!")
 
 
 def main(name: str):
     if name == "__main__":
         App().run()
+
+
+main(__name__)
 

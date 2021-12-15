@@ -1,5 +1,6 @@
 from unittest.mock import patch, Mock, call
 
+import pytest
 import requests
 
 from ssd_library_TUI.libraryClient import App
@@ -181,9 +182,34 @@ def test_show_my_books_failed(mock_input: Mock, mock_print: Mock, mock_get: Mock
     mock_post.return_value.json = lambda: {'key': 'a'}
 
     mock_get.return_value.status_code = 404
-    mock_get.return_value.text = "Not Found!"
     App().run()
 
-    mock_print.assert_any_call("Not Found!")
+    mock_print.assert_any_call("cannot fetch books!")
     assert call('-' * 205) not in mock_print.mock_calls
+
+
+@patch('requests.post')
+@patch('builtins.print')
+@patch('builtins.input', side_effect=['1', 'prova', 'prova', '0', '0'])
+def test_login_error(mock_input: Mock, mock_print: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 403
+    App().run()
+    mock_print.assert_any_call("Cannot login!")
+    assert call("Login successful!\n") not in mock_print.mock_calls
+
+
+@patch('requests.post')
+@patch('requests.get')
+@patch('builtins.input', side_effect=['1', 'prova', 'prova', '1', '0', '0'])
+@patch('builtins.print')
+def test_fetch_book_error(mock_print: Mock, mock_input: Mock, mock_get: Mock, mock_post: Mock):
+    mock_post.return_value.status_code = 200
+    mock_post.return_value.json = lambda: {'key': 'a'}
+    mock_get.return_value.status_code = 404
+
+    App().run()
+
+    mock_print.assert_any_call("Cannot fetch books!")
+    assert call('-' * 205) not in mock_print.mock_calls
+
 
