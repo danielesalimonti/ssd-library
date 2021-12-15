@@ -4,7 +4,7 @@ from .views import BookDetail, BookList, BookRent, BookRentedList, BookListAdmin
 
 urlpatterns = [
     path('my-books/', BookRentedList.as_view(), name='my-books'),
-    path('<str:pk>/', BookDetail.as_view(), name='book'), #libro specifico
+    path('<str:pk>/', BookDetail.as_view()), #libro specifico
     path('', BookList.as_view(), name='books'), #index
     path('rent/<str:isbn>/', BookRent.as_view()), #noleggio libro
     path('admin/<str:pk>/', BookListAdmin.as_view()),
