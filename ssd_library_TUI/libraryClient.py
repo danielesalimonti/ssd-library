@@ -121,7 +121,7 @@ class App:
             arg = 'text'
 
         print("-" * 205)
-        fmt = '%-16s  %-35s  %-45s  %-80s  %-12s  %-3s'
+        fmt = '%-20s  %-35s  %-45s  %-80s  %-12s  %-3s'
         print(fmt % ("ISBN", "AUTHOR", "TITLE", arg.upper(), "PUB DATE", "#PAGES"))
         print("-" * 205)
         for book in all_books:

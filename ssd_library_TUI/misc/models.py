@@ -15,7 +15,7 @@ class ISBN:
 
     def __post_init__(self):
         validate_dataclass(self)
-        validate('ISBN pattern', value=self.value, min_len=13, max_len=13, custom=matches_pattern(self.regex))
+        validate('ISBN pattern', value=self.value, min_len=13, max_len=17, custom=matches_pattern(self.regex))
 
     def __str__(self):
         return self.value

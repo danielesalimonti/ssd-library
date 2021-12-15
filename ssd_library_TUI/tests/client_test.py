@@ -45,7 +45,7 @@ def test_guest_login_show_all_books(mocked_get: Mock, mocked_input: Mock, mocked
     mocked_get.return_value = MockedResponse()
     app = App().run()
 
-    fmt = '%-16s  %-35s  %-45s  %-80s  %-12s  %-3s'
+    fmt = '%-20s  %-35s  %-45s  %-80s  %-12s  %-3s'
     book = MockedResponse().json()[0]
     response = fmt % (book['ISBN'], book['author'], book['title'], book['preview'], book['published_date'],
                       book['num_pages'])
