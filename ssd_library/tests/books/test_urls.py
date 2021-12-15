@@ -54,6 +54,21 @@ def test_books_get_list_authenticated(books):
     assert response.status_code == HTTP_200_OK
 
 
+def test_get_all_mine_books_list_authenticated(books):
+    path = reverse('my-books')
+    user = mixer.blend(get_user_model())
+    client = get_client(user)
+    response = client.get(path)
+    assert response.status_code == HTTP_200_OK
+
+
+def test_get_all_mine_books_list_not_authenticated(books):
+    path = reverse('my-books')
+    client = get_client()
+    response = client.get(path)
+    assert response.status_code == HTTP_403_FORBIDDEN
+
+
 def test_get_non_mine_book(books):
     path = reverse('my-books') + books[0].ISBN + '/'
     user = mixer.blend(get_user_model())
@@ -92,3 +107,10 @@ def test_rent_non_existent_book(books):
     client = get_client(user)
     response = client.get(path)
     assert response.status_code == HTTP_404_NOT_FOUND
+
+
+def test_get_book_as_admin(books):
+    path = '/api/v1/admin/' + books[0].ISBN + '/'
+    client = get_client()
+    response = client.get(path)
+    assert response.status_code == HTTP_403_FORBIDDEN

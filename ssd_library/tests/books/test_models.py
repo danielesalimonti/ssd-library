@@ -138,6 +138,24 @@ def test_too_much_num_pages(db):
         assert True
 
 
+def test_negative_num_pages(db):
+    book = mixer.blend('books.Book', num_pages=-1)
+    try:
+        book.full_clean(exclude=['author', 'title', 'ISBN', 'text', 'preview', 'published_date'])
+        assert False
+    except ValidationError:
+        assert True
+
+
+def test_float_num_pages(db):
+    book = mixer.blend('books.Book', num_pages=0.1)
+    try:
+        book.full_clean(exclude=['author', 'title', 'ISBN', 'text', 'preview', 'published_date'])
+        assert False
+    except ValidationError:
+        assert True
+
+
 
 
 
